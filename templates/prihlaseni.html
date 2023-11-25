@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Přihlášení</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!--Zahlavi-->
+    <div class="navigation">
+        <div class="logo">LOGO</div>
+        <div class="navigation-links">
+            <a href="/" onclick="toggleMenu()">Domů</a>
+            <a href="index.html#o-nas" onclick="toggleMenu()">O nás</a>
+            <a href="/nabidka-stroju" onclick="toggleMenu()">Nabídka strojů</a>
+            <!-- <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a> -->
+            
+            <!-- Pokud je uživatel dispečer -->
+            {% if typ_uctu == 1 %}
+                <a href="/objednavky-k-potvrzeni">Objednávky k potvrzeni</a>
+            {% endif %}
+            <!-- Pokud je uživatel technik -->
+            {% if typ_uctu == 2 %}
+                <a href="/">Přiřazené objednávky</a>
+            {% endif %}
+    
+            <!-- Pokud je uživatel přihlášen -->
+            {% if user_name %}
+                <span>{{ user_name }}</span>
+                <a href="/odhlaseni">Odhlásit se</a>
+            {% else %}
+                <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
+            {% endif %}
+        </div>
+        <div class="hamburger-menu" onclick="toggleMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+<!-- Formular pro prihlaseni -->
+<div class="main-content">
+    <div class="login-container">
+        <h2>Přihlášení</h2>
+        <form action="/prihlaseni" method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.name.label }}
+                {{ form.name(class="form-control") }}
+            </div>
+            <div>
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+            </div>
+            <div>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+            <div>
+                <a href="/registrace">Vytvořit si účet</a>
+            </div>
+        </form>
+        
+    </div>
+</div>
+</body>
+</html>

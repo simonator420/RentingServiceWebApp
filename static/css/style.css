@@ -1,0 +1,546 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/*Uvodni sekce*/
+
+.hero-section {
+    position: relative;
+    height: 100vh;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.97), rgba(0, 0, 0, 0)),
+    url("/static/images/hero-image.jpeg");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-text {
+    text-align: left;
+    padding-left: 6em;
+    padding-top: 32vh;
+    color: white;
+    z-index: 10;
+}
+
+.hero-text h1 {
+    font-size: 5em;
+    font-weight: bold;
+    margin-top: 0.2em;
+    margin-bottom: 0em;
+}
+
+.hero-text h2 {
+    margin-top: 1em;
+    font-size: 1.5em;
+    font-weight: 300;
+}
+
+.form-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 1em 1em 1em;
+    max-width: 800px;
+    margin-left: 6em;
+    border: 1px solid black;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(0.1em);
+    position: relative;
+}
+
+.form-section .input-group {
+    display: flex;
+    align-items: center;
+}
+
+.form-section .input-group label {
+    margin-right: 0.5em;
+    color: white;
+}
+
+.form-section select,
+.form-section input[type="date"] {
+    padding: 0.5em;
+    margin-right: 0.5em;
+    border: 1px solid #ddd;
+    border-radius: 0.25em;
+}
+
+.form-section button {
+    padding: 0.5em 2em;
+    background-color: forestgreen;
+    color: white;
+    border: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+}
+
+.error-message {
+    position: absolute;
+    bottom: -2em; /* Adjust as needed */
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: red;
+    display: none;
+}
+
+/*Zahlavi*/
+
+.navigation {
+    position: fixed;
+    width: 100%;
+    padding: 1.3em;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.logo {
+    color: white;
+    font-size: 1.55em;
+    font-weight: bold;
+    margin-right: 1.25em;
+}
+
+.navigation-links {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    font-weight: 300;
+}
+
+.navigation-links #login {
+    background-color: forestgreen;
+}
+
+.navigation-links.open {
+    left: 0;
+}
+
+.navigation a, .navigation-links span {
+    color: white;
+    text-decoration: none;
+    margin: 0 0.6em;
+    padding: 0.3em 0.6em;
+    border: 1px solid transparent;
+    border-radius: 0.3em;
+    transition: background-color 0.4s ease;
+}
+
+.navigation a:hover {
+    background-color: forestgreen;
+}
+
+/*Jak to funguje sekce*/
+
+.jak-to-fuguje {
+    text-align: center;
+    padding: 1.25em;
+    box-sizing: border-box;
+}
+
+.info-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 4.5em;
+}
+
+.info-box {
+    width: 20em;
+    text-align: center;
+    box-shadow: 0 0 0.625em rgba(0,0,0,0.1);
+    padding: 0.9375em;
+    box-sizing: border-box;
+}
+
+.icon {
+    font-size: 2.5em;
+    margin-bottom: 0.625em;
+}
+
+/*O nas*/
+.o-nas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+    max-width: 75em;
+    box-shadow: 0 0 0.625em rgba(0, 0, 0, 0.1);
+    background-color: white;
+    margin: 4em auto auto;
+}
+
+.o-nas .text-content {
+    flex: 1;
+    padding-left: 1em;
+}
+
+.o-nas .image-content {
+    flex: 1;
+    text-align: right;
+    padding-right: 1em;
+    padding-top: 1em;
+}
+
+.o-nas img {
+    max-width: 60%;
+    height: auto;
+}
+/*Zapati*/
+.footer {
+    background-color: #f1f1f1;
+    padding: 1em;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 7em;
+}
+
+.footer-column {
+    flex: 0 0 30%;
+    padding: 2em;
+}
+
+/*Stranka nabidka stroju*/
+.main-content {
+    margin: 0 auto;
+    padding-top: 7em;
+}
+
+.main-content .form-section{
+    width: 100%;
+    max-width: 50em;
+    margin: auto;
+}
+
+.main-content .form-section label{
+    color: black;
+}
+.selected-values {
+    text-align: center;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.selected-values p {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.selected-values span {
+    font-weight: bold;
+}
+
+.stroj-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+}
+
+.stroj-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 0.3125em;
+    padding: 1.25em;
+    box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.1);
+    width: 18.75em;
+    max-width: 100%;
+    text-align: center;
+}
+
+.stroj-box h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.stroj-box p {
+    margin: 0.3125em 0;
+}
+
+.reserve-button, #technik-button {
+    background-color: forestgreen;
+    color: #fff;
+    border: none;
+    padding: 0.625em 1.25em;
+    border-radius: 0.3125em;
+    cursor: pointer;
+}
+
+/* Objednávky k potvrzení */
+.objednavky-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+    margin: 2em auto;
+    width: 80%;
+    padding-top: 7em;
+}
+
+.objednavky-container h1 {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+
+.objednavky-container table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f0f0f0;
+    box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.objednavky-container th, 
+.objednavky-container td {
+    padding: 0.75em;
+    border: 1px solid #ddd;
+}
+
+.objednavky-container th {
+    background-color: #e0e0e0;
+    font-size: 1.1em;
+}
+
+.objednavky-container tr:hover {
+    background-color: #f5f5f5;
+}
+
+.objednavky-container thead tr {
+    background-color: #d0d0d0;
+}
+
+.pracovnici-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-20%, -50%);
+}
+
+
+
+/* Stranka prihlaseni */
+
+.login-container {
+    background-color: white;
+    max-width: 25em;
+    margin: 2.5em auto;
+    padding: 1.5em;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+}
+
+.login-container h2 {
+    text-align: center;
+    color: #333;
+}
+
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-container label {
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"],
+.login-container input[type="submit"] {
+    padding: 1em;
+    margin-bottom: 1.5em;
+    border: 0.1em solid #ddd;
+    border-radius: 0.4em;
+}
+
+.login-container input[type="submit"] {
+    background-color: forestgreen;
+    color: white;
+    border: none;
+    cursor: pointer;
+    align-self: center;
+}
+
+/* Stranka registrace */
+
+.registration-form {
+    background-color: white;
+    max-width: 25em;
+    margin: 2.5em auto;
+    padding: 1.5em;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+}
+
+.registration-form h2 {
+    text-align: center;
+    color: #333;
+}
+
+.registration-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.registration-form label {
+    margin-bottom: 0.5em;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+}
+
+.form-control {
+    padding: 1em;
+    margin-bottom: 1.5em;
+    border: 0.1em solid #ddd;
+    border-radius: 0.4em;
+}
+
+.error {
+    color: #d9534f;
+    margin-top: -8px;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background-color: forestgreen;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 1em;
+    margin-bottom: 1.5em;
+    border-radius: 0.4em;
+}
+
+.btn-primary:hover {
+    background-color: #006400; /* Change hover color */
+}
+
+/*Mobilni responzivita*/
+
+@media (max-width: 768px) {
+    /*Zahlavi*/
+    .hero-section {
+        padding-left: 1.25em;
+        padding-right: 1.25em;
+    }
+
+    .navigation-links {
+        position: fixed;
+        top: 4.98em;
+        left: -21em;
+        width: 21em;
+        height: calc(100vh - 3.75em);
+        background-color: rgba(0, 0, 0, 0.5);
+        flex-direction: column;
+        justify-content: flex-start;
+        transition: left 0.3s ease-in-out;
+        z-index: 1;
+        margin-left: 0em;
+    }
+
+    .navigation-links #login {
+        background-color: rgba(34, 139, 34, 0.7);
+        border-radius: 0em;
+        display: inline-block;
+    }
+
+    .navigation a {
+        display: block;
+        margin: 0;
+        padding: 0.6em 1.25em;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .navigation a:hover{
+        background-color: transparent;
+    }
+
+    .hamburger-menu {
+        display: block;
+        cursor: pointer;
+    }
+
+    .content{
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+
+    .bar {
+        width: 1.4em;
+        height: 0.2em;
+        background-color: white;
+        margin: 0.2em 0;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .cross .bar:nth-child(1) {
+        transform: rotate(45deg) translateY(0.585em);
+    }
+
+    .cross .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .cross .bar:nth-child(3) {
+        transform: rotate(-45deg) translateY(-0.585em);
+    }
+
+    /*Uvodni sekce*/
+
+    .hero-text {
+        max-width: 100%;
+        padding-left: 0;
+        padding-top: 12em;
+    }
+
+    .hero-text h1{
+        font-size: 3.5em;
+    }
+
+    .hero-text h2{
+        font-size: 1.5em;
+    }
+
+    .form-section {
+        flex-direction: column;
+        margin-left: 0em;
+        margin-right: 0em;
+        padding: 1em;
+    }
+
+    .form-section .input-group {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 1em;
+    }
+
+    .form-section .input-group label {
+        margin-right: 0.5em;
+    }
+
+    .form-section select,
+    .form-section input[type="date"] {
+        flex-grow: 1;
+    }
+
+    .form-section button {
+        width: 50%;
+        margin-top: 1em;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .info-boxes {
+        flex-direction: column;
+        align-items: center;
+    }
+}
