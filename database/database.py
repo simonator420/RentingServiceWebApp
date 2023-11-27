@@ -38,13 +38,15 @@ class Rezervace(Base):
 
     rezervace_id =          Column("rezervace_id",Integer, primary_key=True, nullable=False)
     #rezervace_platnost_do
-    rezervace_platnost=    Column("rezervace_platnost",Time, nullable=False)
+    rezervace_platnost = Column("rezervace_platnost", Boolean, default=True, nullable=False)
     objednavka_id = Column("objednavka_id", Integer, ForeignKey("Objednavka.objednavka_id"), nullable=False)
+    pracovnik_id = Column(Integer, ForeignKey('Pracovnik.pracovnik_id'))
 
-    def __init__(self,rezervace_id,rezervace_platnost, objednavka_id):
+    def __init__(self,rezervace_id,rezervace_platnost, objednavka_id, pracovnik_id):
         self.rezervace_id=rezervace_id
         self.rezervace_platnost=rezervace_platnost
         self.objednavka_id = objednavka_id
+        self.pracovnik_id = pracovnik_id
 
     def __repr__(self):
         return f"({self.rezervace_id}) {self.rezervace_platnost}, {self.objednavka_id}"
@@ -57,14 +59,17 @@ class Objednavka(Base):
     objednavka_id =         Column("objednavka_id",Integer, primary_key=True, nullable=False)
     objednavka_datum_od=    Column("objednavka_datum_od",Date, nullable=False)
     objednavka_datum_do=    Column("objednavka_datum_do",Date, nullable=False)
+    objednavka_zpracovana = Column("objednavka_zpracovana",Boolean, default=False)
     stroj_id = Column("stroj_id", Integer, ForeignKey("Stroj.stroj_id"), nullable=False)
+    ucet_id = Column("ucet_id", Integer, ForeignKey("Ucet.ucet_id"), nullable=False)
 
 
-    def __init__(self,objednavka_id,objednavka_datum_od,objednavka_datum_do,stroj_id):
+    def __init__(self,objednavka_id,objednavka_datum_od,objednavka_datum_do,stroj_id,ucet_id):
         self.objednavka_id=objednavka_id
         self.objednavka_datum_od=objednavka_datum_od
         self.objednavka_datum_do=objednavka_datum_do
         self.stroj_id=stroj_id
+        self.ucet_id = ucet_id
     
     def __repr__(self):
         return f"({self.objednavka_id}) {self.objednavka_datum_od}, {self.objednavka_datum_do}"
@@ -166,21 +171,24 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session_maker = Session()
 
-# typ1 = Typ_stroje(1, "sss")
-# typ2 = Typ_stroje(2, "ddd")
+typ1 = Typ_stroje(1, "sss")
+typ2 = Typ_stroje(2, "ddd")
 
-# stroj1 = Stroj(stroj_id=1, stroj_nazev="Sekačka", stroj_cena=500.0, stroj_typ_id=1)
-# stroj2 = Stroj(stroj_id=2, stroj_nazev="Kombajn", stroj_cena=1500.0, stroj_typ_id=2)
-# katalog = Katalog_stroju(1)
-# katalog.stroje.extend([stroj1, stroj2])
+stroj1 = Stroj(stroj_id=1, stroj_nazev="Sekačka", stroj_cena=500.0, stroj_typ_id=1)
+stroj2 = Stroj(stroj_id=2, stroj_nazev="Kombajn", stroj_cena=1500.0, stroj_typ_id=2)
+katalog = Katalog_stroju(1)
+katalog.stroje.extend([stroj1, stroj2])
 
 dispecer = Ucet(2, "Franta", 1234, "franta@gmail.com", 1)
 technik = Ucet(3, "Jirka", 1234, "jirka@gmail.com", 2)
+zakaznik = Ucet(1, "Jirka", 1234, "jirka@gmail.com", 3)
 # session_maker.add(dispecer)
 # session_maker.add(technik)
+# session_maker.add(zakaznik)
 pracovnik = Pracovnik(1, "Mirek", 150)
 
 # session_maker.add(typ1)
 # session_maker.add(typ2)
 # session_maker.add(pracovnik)
+# session_maker.add(katalog)
 session_maker.commit()

@@ -32,7 +32,7 @@
 
         <!-- Pokud je uživatel přihlášen -->
         {% if user_name %}
-            <span>{{ user_name }}</span>
+            <a href="/profil">{{ user_name }}</a>
             <a href="/odhlaseni">Odhlásit se</a>
         {% else %}
             <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>

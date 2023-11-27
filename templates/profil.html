@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Půjčovna strojů</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+
+<!--Zahlavi-->
+<div class="navigation">
+    <div class="logo">LOGO</div>
+    <div class="navigation-links">
+        <a href="/" onclick="toggleMenu()">Domů</a>
+        <a href="index.html#o-nas" onclick="toggleMenu()">O nás</a>
+        <a href="/nabidka-stroju" onclick="toggleMenu()">Nabídka strojů</a>
+        <!-- <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a> -->
+        
+        <!-- Pokud je uživatel dispečer -->
+        {% if typ_uctu == 1 %}
+            <a href="/objednavky-k-potvrzeni">Objednávky k potvrzeni</a>
+        {% endif %}
+        <!-- Pokud je uživatel technik -->
+        {% if typ_uctu == 2 %}
+            <a href="/">Přiřazené objednávky</a>
+        {% endif %}
+
+        <!-- Pokud je uživatel přihlášen -->
+        {% if user_name %}
+            <a href="/profil">{{ user_name }}</a>
+            <a href="/odhlaseni">Odhlásit se</a>
+        {% else %}
+            <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
+        {% endif %}
+    </div>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="rezervace-container">
+        <h2>Moje Rezervace</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rezervace ID</th>
+                    <th>Platnost</th>
+                    <!-- <th>Objednavka ID</th> -->
+                    <th>Datum Od</th>
+                    <th>Datum Do</th>
+                    <th>Stroj</th>
+                    <th>Pracovník</th>
+                    <th>Cena</th>
+                    <th>Akce</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rezervace, datum_od, datum_do, stroj_nazev, stroj_cena, pracovnik_jmeno, pracovnik_cena, cena in rezervace_records %}
+                <tr>
+                    <td>{{ rezervace.rezervace_id }}</td>
+                    <td>{{ rezervace.rezervace_platnost }}</td>
+                    <!-- <td>{{ rezervace.objednavka_id }}</td> -->
+                    <td>{{ datum_od }}</td>
+                    <td>{{ datum_do }}</td>
+                    <td>{{ stroj_nazev }}</td>
+                    <td>{{ pracovnik_jmeno }}</td>
+                    <td>{{ cena }} Kč</td>
+                    <td>
+                        <!-- TODO Vypsat hlášku, že žádost o zrušení byla poslána -->
+                        <form action="/zrusit_rezervaci" method="post">
+                            <input type="hidden" name="rezervace_id" value="{{ rezervace.rezervace_id }}">
+                            <button type="submit" class="cancel-reservation">Zrušit rezervaci</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="8">Žádné rezervace nebyly nalezeny.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+

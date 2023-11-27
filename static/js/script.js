@@ -136,8 +136,13 @@ function toggleReserveForm(formId) {
 
 function zobrazPracovniciPopup(button, objednavkaId) {
     var popup = document.getElementById('pracovniciPopup');
-    popup.style.display = 'block'; //
+    var buttonRect = button.getBoundingClientRect();
 
+    // Position the popup below the button and aligned to its left edge
+    popup.style.top = (window.scrollY + buttonRect.bottom) + 'px';
+    popup.style.left = buttonRect.left + 'px';
+
+    popup.style.display = 'block';
     fetch('/get-pracovnici')
         .then(response => response.json())
         .then(data => {
@@ -164,20 +169,32 @@ function zobrazPracovniciPopup(button, objednavkaId) {
 function potvrditPracovnika() {
     var popup = document.getElementById('pracovniciPopup');
     var objednavkaId = popup.querySelector('button').getAttribute('data-objednavka-id');
-    console.log("ID pracovnika pro objednavku:", objednavkaId);
+    var selectedTechnicianIds = Array.from(popup.querySelectorAll('input[name="pracovnik"]:checked'))
+                                      .map(input => input.value);
+    var requestData = {
+        objednavka_id: objednavkaId,
+        pracovnik_ids: selectedTechnicianIds
+    };
 
-    let selectedTechnicians = popup.querySelectorAll('input[name="pracovnik"]:checked');
-    selectedTechnicians.forEach(pracovnik => {
-        console.log('Vybrany pracovnik ID:', pracovnik.value);
+    fetch('/vytvorit_rezervaci', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
-
-    popup.style.display = 'none';
 }
 
 function closePracovniciPopup() {
     document.getElementById('pracovniciPopup').style.display = 'none';
 }
-
 
 
 

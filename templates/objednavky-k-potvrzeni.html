@@ -32,7 +32,7 @@
 
         <!-- Pokud je uživatel přihlášen -->
         {% if user_name %}
-            <span>{{ user_name }}</span>
+            <a href="/profil">{{ user_name }}</a>
             <a href="/odhlaseni">Odhlásit se</a>
         {% else %}
             <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
@@ -47,24 +47,28 @@
 
 
 <!-- Orders Section -->
+<div class="main-content">
 <div class="objednavky-container" id="objednavkySection">
     <table id="objednavkyTable">
         <thead>
             <tr>
+                <h2>Objednávky k potvrzení</h2>
                 <th>ID</th>
                 <th>Datum Od</th>
                 <th>Datum Do</th>
                 <th>Stroj ID</th>
+                <th>Zakaznik ID</th>
                 <th>Akce</th>
             </tr>
         </thead>
         <tbody>
-            {% for objednavka in objednavky %}
+            {% for objednavka in objednavky if not objednavka.objednavka_zpracovana %}
             <tr>
                 <td>{{ objednavka.objednavka_id }}</td>
                 <td>{{ objednavka.objednavka_datum_od }}</td>
                 <td>{{ objednavka.objednavka_datum_do }}</td>
                 <td>{{ objednavka.stroj_id }}</td>
+                <td>{{ objednavka.ucet_id }}</td>
                 <td>
                     <button id="technik-button" onclick="zobrazPracovniciPopup(this, '{{ objednavka.objednavka_id }}')">Přiřadit pracovníka</button>
                 </td>
@@ -80,6 +84,44 @@
     <!-- TODO vytvoreni rezervace, odstraneni z objednavek k potvrzeni a kalkulace ceny -->
     <button id="technik-button" onclick="potvrditPracovnika()">OK</button>
 </div>
+</div>
+
+<div class="objednavky-container" id="objednavkyCancelSection">
+    <table id="objednavkyCancelTable">
+        <thead>
+            <tr>
+                <h2>Objednávky ke zrušení</h2>
+                <th>ID</th>
+                <th>Datum Od</th>
+                <th>Datum Do</th>
+                <th>Stroj ID</th>
+                <th>Zakaznik ID</th>
+                <th>Akce</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for objednavka in objednavky %}
+                {% if objednavka.objednavka_id in zrusene_rezervace %}
+                    <tr>
+                        <td>{{ objednavka.objednavka_id }}</td>
+                        <td>{{ objednavka.objednavka_datum_od }}</td>
+                        <td>{{ objednavka.objednavka_datum_do }}</td>
+                        <td>{{ objednavka.stroj_id }}</td>
+                        <td>{{ objednavka.ucet_id }}</td>
+                        <td>
+                            <form action="/zrusit_objednavku" method="post">
+                                <input type="hidden" name="objednavka_id" value="{{ objednavka.objednavka_id }}">
+                                <button type="submit" class="cancel-order-button">Zrušit objednávku</button>
+                            </form>
+                        </td>
+                    </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 
 </body>

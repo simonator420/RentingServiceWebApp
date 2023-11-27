@@ -25,6 +25,10 @@ def set_typ_stroje_values():
 def set_typ_uctu_id():
     return {'typ_uctu': session.get('typ_uctu_id')}
 
+@app.context_processor
+def set_user_id():
+    return {'ucet_id': session.get('ucet_id')}
+
 Base.metadata.create_all(engine)
 
 

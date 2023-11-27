@@ -32,7 +32,7 @@
 
         <!-- Pokud je uživatel přihlášen -->
         {% if user_name %}
-            <span>{{ user_name }}</span>
+            <a href="/profil">{{ user_name }}</a>
             <a href="/odhlaseni">Odhlásit se</a>
         {% else %}
             <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
@@ -87,6 +87,8 @@
                 <button class="reserve-button" onclick="toggleReserveForm('reserve-form-{{ stroj.stroj_id }}')">Zarezervovat</button>
                 <div id="reserve-form-{{ stroj.stroj_id }}" style="display: none;">
                     <form action="/nabidka-stroju" method="post">
+                        <!-- Zaznamenání id účtu pro uložení do tabulky s objednávkama k potvrzení -->
+                        <input type="hidden" name="ucet_id" value="{{ ucet_id }}">
                         <input type="hidden" name="stroj_id" value="{{ stroj.stroj_id }}">
                         <input type="date" name="datum_od" placeholder="Datum od" required>
                         <input type="date" name="datum_do" placeholder="Datum do" required>
