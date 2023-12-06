@@ -3,27 +3,48 @@ from forms import *
 from database.database import *
 from markupsafe import Markup
 from werkzeug.utils import secure_filename
-from datetime import datetime
+import datetime
 
 
 views = Blueprint(__name__, 'views')
 click=0
 
 #Hlavní stránka při prvním načtení
-@views.route('/')
+@views.route('/index.html')
 def homer():
     return render_template('index.html')
 
+
 #Hlavní stránka
-@views.route('/index.html')
+@views.route('/', methods=['GET', 'POST'], endpoint='home')
 def home():
-    return render_template('index.html')
+    form = ObjednavkaForm()
+    results = []  # List to store results
+
+    if form.is_submitted():
+        typ = form.typ.data
+        datum_od = form.datum_od.data
+        datum_do = form.datum_do.data
+
+        query = (
+            session_maker.query(Stroj)
+            .join(Typ_stroje, Typ_stroje.typ_stroje_id == Stroj.typ_stroje_id)
+            .filter(
+                Typ_stroje.typ_stroje_nazev == typ,
+            )
+        )
+
+        results = query.all()
+
+    return render_template('index.html', form=form, results=results)
+
 
 #O nás
 @views.route('/o-nas')
 def onas():
     return render_template('index.html', target_section='o-nas')
 
+#Výpis strojů
 #Výpis strojů
 @views.route('/nabidka-stroju', methods=['GET', 'POST'])
 def nabidka_stroju():
@@ -36,8 +57,8 @@ def nabidka_stroju():
             ucet_id = request.form['ucet_id']
 
             # Convert string dates to Python date objects
-            datum_od = datetime.strptime(datum_od_str, '%Y-%m-%d').date()
-            datum_do = datetime.strptime(datum_do_str, '%Y-%m-%d').date()
+            datum_od = datetime.datetime.strptime(datum_od_str, '%Y-%m-%d').date()
+            datum_do = datetime.datetime.strptime(datum_do_str, '%Y-%m-%d').date()
 
             new_objednavka = Objednavka(
                 objednavka_id = None,  # Assuming autoincrement is enabled
@@ -61,7 +82,6 @@ def nabidka_stroju():
         stroje = session_maker.query(Stroj).all()
 
     return render_template('nabidka-stroju.html', stroje=stroje)
-
 
 #Výpis pracovníků
 @views.route('/pracovnici')
@@ -94,7 +114,6 @@ def prihlaseni():
             print('Nesprávné uživatelské jméno nebo heslo')
 
     return render_template('prihlaseni.html', form=form_prihlaseni)
-
 
 #Registrace zákazníka
 @views.route('/registrace', methods=['GET', 'POST'])
@@ -132,28 +151,28 @@ def objednavky_k_potvrzeni():
     zrusene_rezervace_id = [rez.objednavka_id for rez in session_maker.query(Rezervace).filter_by(rezervace_platnost=False).all()]
     print(f"Tohle jsou zrusene rezervace: {zrusene_rezervace_id}")
 
-
     return render_template('objednavky-k-potvrzeni.html', objednavky=objednavky, zrusene_rezervace=zrusene_rezervace_id)
 
-# získání seznamu všech pracovníků
+# získání seznamu všech pracovníků (techniku)
 @views.route('/get-pracovnici')
 def get_pracovnici():
-    pracovnici = session_maker.query(Pracovnik).all()
-    return jsonify([{ 'pracovnik_id': pracovnik.pracovnik_id, 'pracovnik_jmeno': pracovnik.pracovnik_jmeno } for pracovnik in pracovnici])
+    ucet_records = session_maker.query(Ucet).filter(Ucet.typ_uctu_id == 2).all()
+    return jsonify([{ 'ucet_id': ucet.ucet_id, 'ucet_jmeno': ucet.ucet_jmeno } for ucet in ucet_records])
+
 
 # vytvoření nového záznamu do tabulky Rezervace po přiřazení pracovníka dispečerem
 @views.route('/vytvorit_rezervaci', methods=['POST'])
 def vytvorit_rezervaci():
     data = request.json
     objednavka_id = data['objednavka_id']
-    pracovnik_id = data['pracovnik_ids'][0]
+    ucet_id = data['ucet_ids'][0]  # Assuming you're only selecting one Ucet
 
     # Create a new Rezervace instance
     new_rezervace = Rezervace(
         rezervace_id=None,
         rezervace_platnost=True,
         objednavka_id=objednavka_id,
-        pracovnik_id=pracovnik_id
+        ucet_id=ucet_id  # Update this field name in your Rezervace model
     )
 
     objednavka = session_maker.query(Objednavka).filter_by(objednavka_id=objednavka_id).first()
@@ -167,32 +186,42 @@ def vytvorit_rezervaci():
 
     return jsonify({'message': 'Rezervace created successfully'})
 
+
 # Vypisování potvrzených rezervací na stránce profil.html
 @views.route('/profil')
 def profil():
     user_id = session.get('ucet_id')
 
+    # pokud je uživatel přihlášen
     if user_id is not None:
         # Filtrování objednávek pouze pro přihlášeného zákazníka
         rezervace_zaznamy = session_maker.query(
-            Rezervace, 
-            Objednavka.objednavka_datum_od, 
+            Rezervace,
+            Objednavka.objednavka_datum_od,
             Objednavka.objednavka_datum_do,
             Stroj.stroj_nazev, Stroj.stroj_cena,
-            Pracovnik.pracovnik_jmeno, Pracovnik.pracovnik_cena
-        ).join(Objednavka, Rezervace.objednavka_id == Objednavka.objednavka_id)\
-        .join(Stroj, Objednavka.stroj_id == Stroj.stroj_id)\
-        .join(Pracovnik, Rezervace.pracovnik_id == Pracovnik.pracovnik_id)\
-        .filter(Objednavka.ucet_id == user_id).all()
+            Ucet.ucet_jmeno
+        ).join(Objednavka, Rezervace.objednavka_id == Objednavka.objednavka_id) \
+            .join(Stroj, Objednavka.stroj_id == Stroj.stroj_id) \
+            .join(Ucet, Rezervace.ucet_id == Ucet.ucet_id) \
+            .filter(Objednavka.ucet_id == user_id).all()
 
         # Výpočet ceny
+        # zpracovane_zaznamy = []
+        # for zaznam in rezervace_zaznamy:
+        #     hours = (zaznam[2] - zaznam[1]).total_seconds() / 3600
+        #     cena = int(zaznam[4] * hours + zaznam[6] * hours)
+        #     zpracovany_zaznam = tuple(zaznam) + (cena,)
+        #     zpracovane_zaznamy.append(zpracovany_zaznam)
+
         zpracovane_zaznamy = []
         for zaznam in rezervace_zaznamy:
             hours = (zaznam[2] - zaznam[1]).total_seconds() / 3600
-            cena = int(zaznam[4] * hours + zaznam[6] * hours)
+            fixed_cost = 150  # Fixed cost replacing Pracovnik cost
+            cena = int(zaznam[4] * hours + fixed_cost * hours)
             zpracovany_zaznam = tuple(zaznam) + (cena,)
             zpracovane_zaznamy.append(zpracovany_zaznam)
-        
+
         print(f"Tohle jsou rezervace_records {zpracovane_zaznamy}")
         return render_template('profil.html', rezervace_records=zpracovane_zaznamy)
 
@@ -203,7 +232,7 @@ def profil():
 @views.route('/zrusit_rezervaci', methods=['POST'])
 def zrusit_rezervaci():
     rezervace_id = request.form.get('rezervace_id')
-    
+
     rezervace_to_cancel = session_maker.query(Rezervace).filter_by(rezervace_id=rezervace_id).first()
     if rezervace_to_cancel:
         # Po stisknuti tlačítka se rezervace oznaci jako False
@@ -218,12 +247,12 @@ def zrusit_rezervaci():
 def zrusit_objednavku():
     objednavka_id = request.form.get('objednavka_id')
 
-    # Delete the Rezervace record linked to this Objednavka
+    # Vymaže Rezervaci, která má v sobě ID objednávky
     rezervace_to_delete = session_maker.query(Rezervace).filter_by(objednavka_id=objednavka_id).first()
     if rezervace_to_delete:
         session_maker.delete(rezervace_to_delete)
 
-    # Delete the Objednavka record
+    # Vymaže objednávku s ID
     objednavka_to_delete = session_maker.query(Objednavka).filter_by(objednavka_id=objednavka_id).first()
     if objednavka_to_delete:
         session_maker.delete(objednavka_to_delete)
@@ -232,4 +261,19 @@ def zrusit_objednavku():
 
     return redirect(url_for('views.objednavky_k_potvrzeni'))
 
+@views.route('/moje-zakazky')
+def moje_zakazky():
+    user_id = session.get('ucet_id')
+
+    # Fetch Rezervace records for the logged-in user
+    rezervace_zaznamy = session_maker.query(
+        Rezervace.rezervace_id,
+        Objednavka.objednavka_datum_od,
+        Objednavka.objednavka_datum_do,
+        Stroj.stroj_nazev
+    ).join(Objednavka, Rezervace.objednavka_id == Objednavka.objednavka_id) \
+     .join(Stroj, Objednavka.stroj_id == Stroj.stroj_id) \
+     .filter(Rezervace.ucet_id == user_id).all()
+
+    return render_template('moje-zakazky.html', rezervace_records=rezervace_zaznamy)
 

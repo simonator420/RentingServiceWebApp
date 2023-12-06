@@ -11,13 +11,12 @@ app.config['SECRET_KEY'] = '123'
 def set_user_name():
     return {'user_name': session.get('user_name')}
 
+# Získání typů strojů pro vyplnění comboboxu
 @app.context_processor
 def set_typ_stroje_values():
     typ_stroje_values = session_maker.query(Typ_stroje.typ_stroje_nazev).distinct().all()
-    
-    # Extract the values from the query result
+
     typ_stroje_values = [value[0] for value in typ_stroje_values]
-    print(f"Tohle jsou stroje values{typ_stroje_values}")
 
     return {'typ_stroje_values': typ_stroje_values}
 

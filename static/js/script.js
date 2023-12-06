@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // pokud se klikne na OK ve formulari
     okButton.addEventListener('click', function(event) {
         event.preventDefault();
-        var machineSelected = machineType.value !== 'default';
+        var machineSelected = machineType.value === 'Sekačka' || machineType.value === 'Kombajn';
         var datesSelected = dateFrom.value && dateTo.value;
 
         // kontrola zda je vybran typ stroje a oba datumy
@@ -85,27 +85,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-function vypisHodnoty() {
-    // Prevent default form submission (if needed)
-
-    // Get the values from the form fields
-    var machineType = document.getElementById('machine-type').value;
-    var dateFrom = document.getElementById('date-from').value;
-    var dateTo = document.getElementById('date-to').value;
-
-    console.log('Machine Type:', machineType);
-    console.log('Date From:', dateFrom);    
-    console.log('Date To:', dateTo);
-
-    // Display the values
-    document.getElementById('display-machine').textContent = machineType;
-    document.getElementById('display-date-from').textContent = dateFrom;
-    document.getElementById('display-date-to').textContent = dateTo;
-};
-
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("filter-form").addEventListener("submit", function(e){
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
 
         var machineType = document.getElementById("machine-type").value;
 
@@ -116,11 +98,10 @@ document.addEventListener("DOMContentLoaded", function(){
             },
             body: 'machine-type=' + encodeURIComponent(machineType)
         })
-        .then(response => response.text())
-        .then(data => {
-            // Update your page with the new data
-            document.querySelector(".stroj-container").innerHTML = data;
-        });
+            .then(response => response.text())
+            .then(data => {
+                document.querySelector(".stroj-container").innerHTML = data;
+            });
     });
 });
 
@@ -138,7 +119,6 @@ function zobrazPracovniciPopup(button, objednavkaId) {
     var popup = document.getElementById('pracovniciPopup');
     var buttonRect = button.getBoundingClientRect();
 
-    // Position the popup below the button and aligned to its left edge
     popup.style.top = (window.scrollY + buttonRect.bottom) + 'px';
     popup.style.left = buttonRect.left + 'px';
 
@@ -149,18 +129,16 @@ function zobrazPracovniciPopup(button, objednavkaId) {
             var pracovniciList = popup.querySelector('.pracovnici-list');
             pracovniciList.innerHTML = '';
 
-
-            data.forEach(pracovnik => {
+            data.forEach(ucet => {
                 pracovniciList.innerHTML += `
                     <div>
-                        <input type="checkbox" id="pracovnik-${pracovnik.pracovnik_id}" name="pracovnik" value="${pracovnik.pracovnik_id}">
-                        <label for="pracovnik-${pracovnik.pracovnik_id}">${pracovnik.pracovnik_jmeno}</label>
+                        <input type="checkbox" id="ucet-${ucet.ucet_id}" name="ucet" value="${ucet.ucet_id}">
+                        <label for="ucet-${ucet.ucet_id}">${ucet.ucet_jmeno}</label>
                     </div>`;
             });
         })
         .catch(error => {
             console.error('Error fetching pracovnici:', error);
-            alert('There was an error fetching the pracovnik list.');
         });
 
     popup.querySelector('button').setAttribute('data-objednavka-id', objednavkaId);
@@ -169,11 +147,11 @@ function zobrazPracovniciPopup(button, objednavkaId) {
 function potvrditPracovnika() {
     var popup = document.getElementById('pracovniciPopup');
     var objednavkaId = popup.querySelector('button').getAttribute('data-objednavka-id');
-    var selectedTechnicianIds = Array.from(popup.querySelectorAll('input[name="pracovnik"]:checked'))
-                                      .map(input => input.value);
+    var selectedUcetIds = Array.from(popup.querySelectorAll('input[name="ucet"]:checked'))
+        .map(input => input.value);
     var requestData = {
         objednavka_id: objednavkaId,
-        pracovnik_ids: selectedTechnicianIds
+        ucet_ids: selectedUcetIds
     };
 
     fetch('/vytvorit_rezervaci', {
@@ -183,18 +161,25 @@ function potvrditPracovnika() {
         },
         body: JSON.stringify(requestData)
     })
-    .then(response => response.json())
-    .then(data => {
-        window.location.reload();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 function closePracovniciPopup() {
     document.getElementById('pracovniciPopup').style.display = 'none';
 }
+
+
+
+
+
+
+
 
 
 

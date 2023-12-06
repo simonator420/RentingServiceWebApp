@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Přihlášení</title>
+  <title>Půjčovna strojů</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500&display=swap" rel="stylesheet">
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
 
@@ -31,7 +32,7 @@
 
     <!-- Pokud je uživatel přihlášen -->
     {% if user_name %}
-    <span>{{ user_name }}</span>
+    <a href="/profil">{{ user_name }}</a>
     <a href="/odhlaseni">Odhlásit se</a>
     {% else %}
     <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
@@ -44,29 +45,33 @@
   </div>
 </div>
 
-<!-- Formular pro prihlaseni -->
 <div class="main-content">
-  <div class="login-container">
-    <h2>Přihlášení</h2>
-    <form action="/prihlaseni" method="post">
-      {{ form.hidden_tag() }}
-      <div>
-        {{ form.name.label }}
-        {{ form.name(class="form-control") }}
-      </div>
-      <div>
-        {{ form.password.label }}
-        {{ form.password(class="form-control") }}
-      </div>
-      <div>
-        {{ form.submit(class="btn btn-primary") }}
-      </div>
-      <div>
-        <a href="/registrace">Vytvořit si účet</a>
-      </div>
-    </form>
-
-  </div>
+    <div class="rezervace-container">
+        <h2>Moje Zakázky</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rezervace ID</th>
+                    <th>Datum Od</th>
+                    <th>Datum Do</th>
+                    <th>Stroj</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rezervace_id, datum_od, datum_do, stroj_nazev in rezervace_records %}
+                <tr>
+                    <td>{{ rezervace_id }}</td>
+                    <td>{{ datum_od }}</td>
+                    <td>{{ datum_do }}</td>
+                    <td>{{ stroj_nazev }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="4">Žádné zakázky nebyly nalezeny.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>
+
