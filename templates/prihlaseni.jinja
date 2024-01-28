@@ -1,0 +1,29 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+    <!-- Formular pro prihlaseni -->
+    <div class="main-content">
+      <div class="login-container">
+        <h2>Přihlášení</h2>
+        <form action="/prihlaseni" method="post">
+          {{ form.hidden_tag() }}
+          <div>
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+          </div>
+          <div>
+            {{ form.password.label }}
+            {{ form.password(class="form-control") }}
+          </div>
+          <div>
+            {{ form.submit(class="btn btn-primary") }}
+          </div>
+          <div>
+            <a href="/registrace">Vytvořit si účet</a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+{% endblock %}

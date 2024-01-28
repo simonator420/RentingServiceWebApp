@@ -1,0 +1,79 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+  <div class="main-content">
+    <div class="objednavky-container" id="objednavkySection">
+      <table id="objednavkyTable">
+        <thead>
+        <tr>
+          <h2>Objednávky k potvrzení</h2>
+          <th>ID</th>
+          <th>Datum Od</th>
+          <th>Datum Do</th>
+          <th>Stroj ID</th>
+          <th>Zakaznik ID</th>
+          <th>Akce</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for objednavka in objednavky if not objednavka.objednavka_zpracovana %}
+        <tr>
+          <td>{{ objednavka.objednavka_id }}</td>
+          <td>{{ objednavka.objednavka_datum_od }}</td>
+          <td>{{ objednavka.objednavka_datum_do }}</td>
+          <td>{{ objednavka.stroj_id }}</td>
+          <td>{{ objednavka.ucet_id }}</td>
+          <td>
+            <button id="technik-button" onclick="zobrazPracovniciPopup(this, '{{ objednavka.objednavka_id }}')">Přiřadit pracovníka</button>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  <div id="pracovniciPopup" class="pracovnici-popup" style="display:none;">
+    <div class="pracovnici-list">
+    </div>
+    <button onclick="potvrditPracovnika()">OK</button>
+  </div>
+
+    <div class="objednavky-container" id="objednavkyCancelSection">
+      <table id="objednavkyCancelTable">
+        <thead>
+        <tr>
+          <h2>Objednávky ke zrušení</h2>
+          <th>ID</th>
+          <th>Datum Od</th>
+          <th>Datum Do</th>
+          <th>Stroj ID</th>
+          <th>Zakaznik ID</th>
+          <th>Akce</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for objednavka in objednavky %}
+        {% if objednavka.objednavka_id in zrusene_rezervace %}
+        <tr>
+          <td>{{ objednavka.objednavka_id }}</td>
+          <td>{{ objednavka.objednavka_datum_od }}</td>
+          <td>{{ objednavka.objednavka_datum_do }}</td>
+          <td>{{ objednavka.stroj_id }}</td>
+          <td>{{ objednavka.ucet_id }}</td>
+          <td>
+            <form action="/zrusit_objednavku" method="post">
+              <input type="hidden" name="objednavka_id" value="{{ objednavka.objednavka_id }}">
+              <button type="submit" class="cancel-order-button">Zrušit objednávku</button>
+            </form>
+          </td>
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}

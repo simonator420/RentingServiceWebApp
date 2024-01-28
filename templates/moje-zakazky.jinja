@@ -1,0 +1,33 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+    <div class="main-content">
+        <div class="rezervace-container">
+            <h2>Moje Zakázky</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rezervace ID</th>
+                        <th>Datum Od</th>
+                        <th>Datum Do</th>
+                        <th>Stroj</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rezervace_id, datum_od, datum_do, stroj_nazev in rezervace_records %}
+                    <tr>
+                        <td>{{ rezervace_id }}</td>
+                        <td>{{ datum_od }}</td>
+                        <td>{{ datum_do }}</td>
+                        <td>{{ stroj_nazev }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="4">Žádné zakázky nebyly nalezeny.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

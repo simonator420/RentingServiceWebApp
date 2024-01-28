@@ -1,0 +1,39 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+    <!-- Formular pro prihlaseni -->
+    <div class="main-content">
+      <div class="registration-form">
+        <h2>Registrace</h2>
+        <form method="POST" action="/registrace">
+          {{ form.hidden_tag() }}
+          <div>
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+            {% for error in form.name.errors %}
+            <p class="error">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div>
+            {{ form.email.label }}
+            {{ form.email(class="form-control") }}
+            {% for error in form.email.errors %}
+            <p class="error">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div>
+            {{ form.password.label }}
+            {{ form.password(class="form-control") }}
+            {% for error in form.password.errors %}
+            <p class="error">{{ error }}</p>
+            {% endfor %}
+          </div>
+          <div>
+            {{ form.submit(class="btn btn-primary") }}
+          </div>
+        </form>
+      </div>
+    </div>
+
+{% endblock %}

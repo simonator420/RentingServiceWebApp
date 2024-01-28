@@ -1,0 +1,100 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+    <!--Uvodni sekce-->
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1>Půjčovna strojů</h1>
+            <h2>Zadejte vaše preference a doručíme vám stroj do druhého dne</h2>
+        </div>
+        <div class="form-section">
+             <!--<form id="filter-form" method="POST" action="{{ url_for('views.home') }}">-->
+            <div class="input-group">
+                <label for="machine-type">Typ stroje:</label>
+                <select id="machine-type">
+                    <option value="default">Vyberte typ stroje</option>
+                    <!-- Vyplnění zápisy z tabulky Typ_stroje -->
+                    {% for typ_stroje_value in typ_stroje_values %}
+                    <option value="{{ typ_stroje_value }}">{{ typ_stroje_value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="date-from">Od kdy:</label>
+                <input type="date" id="date-from">
+            </div>
+            <div class="input-group">
+                <label for="date-to">Do kdy:</label>
+                <input type="date" id="date-to">
+            </div>
+            <button type="submit">OK</button>
+             <!--</form>-->
+            <div class="error-message"></div>
+            <!--po vybrání by se měli vypsat věci zde-->
+    <div class="output-group">
+        {% for result in results %}
+            <div class="input-group">
+                <label for="machine-type">Typ stroje:</label>
+                <p>{{ result.typ_stroje.typ }}</p>
+            </div>
+            <div class="input-group">
+                <label for="date-from">Od kdy:</label>
+                <p>{{ result.datum_od }}</p>
+            </div>
+            <div class="input-group">
+                <label for="date-to">Do kdy:</label>
+                <p>{{ result.datum_do }}</p>
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+
+        </div>
+    </div>
+
+    <!--Jak to funguje sekce-->
+    <div class="jak-to-fuguje">
+        <h1>Jak to funguje?</h1>
+        <div class="info-boxes">
+            <div class="info-box">
+                <div class="icon"><i class="fas fa-search"></i></div>
+                <h3>Výběr stroje</h3>
+                <p>Vyberte si stroj, který nejlépe vyhovuje vašim potřebám.</p>
+            </div>
+            <div class="info-box">
+                <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                <h3>Rezervace termínu</h3>
+                <p>Zvolte datum, kdy chcete stroj půjčit.</p>
+            </div>
+            <div class="info-box">
+                <div class="icon"><i class="fas fa-truck"></i></div>
+                <h3>Doručení stroje</h3>
+                <p>Stroj vám doručíme přímo na místo určení.</p>
+            </div>
+        </div>
+    </div>
+
+    <!--O nas sekce-->
+    <div class="o-nas" id="o-nas">
+        <div class="text-content">
+            <h1>O nás</h1>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Lorem ipsum dolor sit amet, consectetuer adipiscing
+                elit.
+                Sed elit dui, pellentesque a, faucibus vel, interdum nec, diam. Nunc tincidunt ante vitae massa. Mauris
+                dictum facilisis augue.
+                Etiam neque. Praesent vitae arcu tempor neque lacinia pretium. Duis pulvinar. Sed ut perspiciatis unde omnis
+                iste natus error sit
+                voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis
+                et quasi architecto beatae
+                vitae dicta sunt explicabo. Mauris dolor felis, sagittis at, luctus sed, aliquam non, tellus. Sed ac dolor
+                sit amet purus malesuada congue.
+                Nullam sit amet magna in magna gravida vehicula. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum
+                at dui. In convallis.
+                Mauris elementum mauris vitae tortor. </p>
+        </div>
+        <div class="image-content">
+            <img src="/static/images/o-nas-image.jpg">
+        </div>
+    </div>
+{% endblock %}

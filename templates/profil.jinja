@@ -1,0 +1,54 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+    <div class="main-content">
+      <div class="rezervace-container">
+        <h2>Moje Rezervace</h2>
+        <table>
+          <thead>
+          <tr>
+    <!--        <th>Rezervace ID</th>-->
+            <th>Platnost</th>
+            <!-- <th>Objednavka ID</th> -->
+            <th>Datum Od</th>
+            <th>Datum Do</th>
+            <th>Stroj</th>
+            <th>Přiřazený Pracovník</th> <!-- Updated header -->
+            <th>Cena</th>
+            <th>Akce</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for rezervace, datum_od, datum_do, stroj_nazev, stroj_cena, ucet_jmeno, cena in rezervace_records %}
+          <tr>
+    <!--        <td>{{ rezervace.rezervace_id }}</td>-->
+            <td>
+            {% if rezervace.rezervace_platnost %}
+                Aktivní rezervace
+            {% else %}
+                Čeká na zrušení
+            {% endif %}
+            </td>
+            <!-- <td>{{ rezervace.objednavka_id }}</td> -->
+            <td>{{ datum_od }}</td>
+            <td>{{ datum_do }}</td>
+            <td>{{ stroj_nazev }}</td>
+            <td>{{ ucet_jmeno }}</td> <!-- Replaced pracovnik_jmeno with ucet_jmeno -->
+            <td>{{ cena }} Kč</td>
+            <td>
+              <form action="/zrusit_rezervaci" method="post">
+                <input type="hidden" name="rezervace_id" value="{{ rezervace.rezervace_id }}">
+                <button type="submit" class="cancel-reservation">Zrušit rezervaci</button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="8">Žádné rezervace nebyly nalezeny.</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+{% endblock %}
+

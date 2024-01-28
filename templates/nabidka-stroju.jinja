@@ -1,0 +1,59 @@
+{% extends '/__main.jinja' %}
+
+{% block content %}
+
+    <div class="main-content">
+        <div class="form-section">
+            <div class="input-group">
+                <label for="machine-type">Typ stroje:</label>
+                <select id="machine-type">
+                    <option value="default">Vyberte typ stroje</option>
+                    <!-- Vyplnění zápisy z tabulky Typ_stroje -->
+                    {% for typ_stroje_value in typ_stroje_values %}
+                    <option value="{{ typ_stroje_value }}">{{ typ_stroje_value }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="date-from">Od kdy:</label>
+                <input type="date" id="date-from">
+            </div>
+            <div class="input-group">
+                <label for="date-to">Do kdy:</label>
+                <input type="date" id="date-to">
+            </div>
+            <button type="submit">OK</button>
+            <div class="error-message"></div>
+        </div>
+
+        <div class="selected-values">
+            <p>Typ stroje: <span id="display-machine"></span></p>
+            <p>Od kdy: <span id="display-date-from"></span></p>
+            <p>Do kdy: <span id="display-date-to"></span></p>
+        </div>
+
+
+        <div class="stroj-container">
+            {% for stroj in stroje %}
+            <div class="stroj-box">
+                <h2>{{ stroj.stroj_nazev }}</h2>
+                <p>Cena: {{ stroj.stroj_cena }} Kč</p>
+                <p style="display: none;">Datum dostupnosti: {{ stroj.datum_dostupnosti }}</p>
+                <p>{{ stroj.stroj_popis }}</p>
+                {% if user_name %}
+                <button class="reserve-button" onclick="toggleReserveForm('reserve-form-{{ stroj.stroj_id }}')">Zarezervovat</button>
+                <div id="reserve-form-{{ stroj.stroj_id }}" style="display: none;">
+                    <form action="/nabidka-stroju" method="post">
+                        <input type="hidden" name="stroj_id" value="{{ stroj.stroj_id }}">
+                        <input type="hidden" name="ucet_id" value="{{ ucet_id }}">
+                        <input type="date" name="datum_od" placeholder="Datum od" required class="datum-rezervace">
+                        <input type="date" name="datum_do" placeholder="Datum do" required class="datum-rezervace">
+                        <input type="submit" value="Přidej Objednávku" class="button-rezervace">
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

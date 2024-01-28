@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Pokud jsme na stránce nabidka-stroju.html a query je nastavené, tak se jeho prvky nastaví jako vybrané hodnoty
+    // Pokud jsme na stránce nabidka-stroju.jinja a query je nastavené, tak se jeho prvky nastaví jako vybrané hodnoty
     if (window.location.pathname.endsWith('/nabidka-stroju')) {
         var urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('machine') && urlParams.has('dateFrom') && urlParams.has('dateTo')) {

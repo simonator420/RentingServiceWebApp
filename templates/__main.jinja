@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Půjčovna strojů</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" type="text/css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;500&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </head>
+
+    <body>
+        <!-- Include navigation -->
+        {% include '__nav.jinja' %}
+
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        {% include '__footer.jinja' %}
+    </body>
+</html>

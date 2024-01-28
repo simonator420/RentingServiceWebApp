@@ -14,7 +14,7 @@ click=0
 #Hlavní stránka při prvním načtení
 @views.route('/index.html')
 def homer():
-    return render_template('index.html')
+    return render_template('index.jinja')
 
 
 #Hlavní stránka
@@ -41,14 +41,14 @@ def home():
         # Získání výsledků dotazu
         results = query.all()
 
-    # Vrátí šablonu index.html s předanými daty
-    return render_template('index.html', form=form, results=results)
+    # Vrátí šablonu index.jinja s předanými daty
+    return render_template('index.jinja', form=form, results=results)
 
 
 #O nás
 @views.route('/o-nas')
 def onas():
-    return render_template('index.html', target_section='o-nas')
+    return render_template('index.jinja', target_section='o-nas')
 
 #Výpis strojů
 @views.route('/nabidka-stroju', methods=['GET', 'POST'])
@@ -88,8 +88,8 @@ def nabidka_stroju():
     else:
         stroje = session_maker.query(Stroj).all()
 
-    # Vrátí šablonu nabidka-stroju.html s daty o strojích
-    return render_template('nabidka-stroju.html', stroje=stroje)
+    # Vrátí šablonu nabidka-stroju.jinja s daty o strojích
+    return render_template('nabidka-stroju.jinja', stroje=stroje)
 
 #Výpis pracovníků
 @views.route('/pracovnici')
@@ -123,8 +123,8 @@ def prihlaseni():
         else:
             print('Nesprávné uživatelské jméno nebo heslo')
 
-    # Vrátí šablonu prihlaseni.html s formulářem pro přihlášení
-    return render_template('prihlaseni.html', form=form_prihlaseni)
+    # Vrátí šablonu prihlaseni.jinja s formulářem pro přihlášení
+    return render_template('prihlaseni.jinja', form=form_prihlaseni)
 
 #Registrace zákazníka
 @views.route('/registrace', methods=['GET', 'POST'])
@@ -152,8 +152,8 @@ def registrace():
         # Přesměrování na stránku pro přihlášení
         return redirect(url_for('views.prihlaseni'))
 
-    # Vrátí šablonu registrace.html s formulářem pro registraci
-    return render_template('registrace.html', form=form)
+    # Vrátí šablonu registrace.jinja s formulářem pro registraci
+    return render_template('registrace.jinja', form=form)
 
 #Odhlášení zákazníka
 @views.route('/odhlaseni')
@@ -172,8 +172,8 @@ def objednavky_k_potvrzeni():
     # Získání ID objednávek s neplatnou rezervací
     zrusene_rezervace_id = [rez.objednavka_id for rez in session_maker.query(Rezervace).filter_by(rezervace_platnost=False).all()]
 
-    # Vrátí šablonu objednavky-k-potvrzeni.html s daty o objednávkách
-    return render_template('objednavky-k-potvrzeni.html', objednavky=objednavky, zrusene_rezervace=zrusene_rezervace_id)
+    # Vrátí šablonu objednavky-k-potvrzeni.jinja s daty o objednávkách
+    return render_template('objednavky-k-potvrzeni.jinja', objednavky=objednavky, zrusene_rezervace=zrusene_rezervace_id)
 
 # Získání seznamu všech pracovníků (techniku)
 @views.route('/get-pracovnici')
@@ -213,7 +213,7 @@ def vytvorit_rezervaci():
     return jsonify({'message': 'Rezervace uspesne vytvorena'})
 
 
-# Vypisování potvrzených rezervací na stránce profil.html
+# Vypisování potvrzených rezervací na stránce profil.jinja
 @views.route('/profil')
 def profil():
     # Získání ID přihlášeného uživatele
@@ -242,8 +242,8 @@ def profil():
             zpracovany_zaznam = tuple(zaznam) + (cena,)
             zpracovane_zaznamy.append(zpracovany_zaznam)
 
-        # Vrátí šablonu profil.html s daty rezervací
-        return render_template('profil.html', rezervace_records=zpracovane_zaznamy)
+        # Vrátí šablonu profil.jinja s daty rezervací
+        return render_template('profil.jinja', rezervace_records=zpracovane_zaznamy)
 
     # Přesměrování na přihlášení, pokud uživatel není přihlášen
     return redirect(url_for('views.prihlaseni'))
@@ -303,6 +303,6 @@ def moje_zakazky():
      .join(Stroj, Objednavka.stroj_id == Stroj.stroj_id) \
      .filter(Rezervace.ucet_id == user_id).all()
 
-    # Vrátí šablonu moje-zakazky.html s daty o rezervacích
-    return render_template('moje-zakazky.html', rezervace_records=rezervace_zaznamy)
+    # Vrátí šablonu moje-zakazky.jinja s daty o rezervacích
+    return render_template('moje-zakazky.jinja', rezervace_records=rezervace_zaznamy)
 
