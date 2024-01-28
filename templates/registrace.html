@@ -13,35 +13,35 @@
 
 <!--Zahlavi-->
 <div class="navigation">
-  <div class="logo">LOGO</div>
-  <div class="navigation-links">
-    <a href="/" onclick="toggleMenu()">Domů</a>
-    <a href="index.html#o-nas" onclick="toggleMenu()">O nás</a>
-    <a href="/nabidka-stroju" onclick="toggleMenu()">Nabídka strojů</a>
-    <!-- <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a> -->
+    <div class="logo">LOGO</div>
+    <div class="navigation-links">
+        <a href="/" onclick="toggleMenu()">Domů</a>
+        <a href="index.html#o-nas" onclick="toggleMenu()">O nás</a>
+        <a href="/nabidka-stroju" onclick="toggleMenu()">Nabídka strojů</a>
+        <!-- <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a> -->
 
-    <!-- Pokud je uživatel dispečer -->
-    {% if typ_uctu == 1 %}
-    <a href="/objednavky-k-potvrzeni">Objednávky k potvrzeni</a>
-    {% endif %}
-    <!-- Pokud je uživatel technik -->
-    {% if typ_uctu == 2 %}
-    <a href="/">Přiřazené objednávky</a>
-    {% endif %}
+        <!-- Pokud je uživatel dispečer -->
+        {% if typ_uctu == 1 %}
+        <a href="/objednavky-k-potvrzeni">Objednávky k potvrzeni</a>
+        {% endif %}
+        <!-- Pokud je uživatel technik -->
+        {% if typ_uctu == 2 %}
+        <a href="/moje-zakazky">Přiřazené objednávky</a>
+        {% endif %}
 
-    <!-- Pokud je uživatel přihlášen -->
-    {% if user_name %}
-    <a href="/profil">{{ user_name }}</a>
-    <a href="/odhlaseni">Odhlásit se</a>
-    {% else %}
-    <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
-    {% endif %}
-  </div>
-  <div class="hamburger-menu" onclick="toggleMenu()">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
+        <!-- Pokud je uživatel přihlášen -->
+        {% if user_name %}
+        <a href="/profil">{{ user_name }}</a>
+        <a href="/odhlaseni">Odhlásit se</a>
+        {% else %}
+        <a id="login" href="/prihlaseni" onclick="toggleMenu()">Přihlásit se</a>
+        {% endif %}
+    </div>
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
 </div>
 
 <!-- Formular pro prihlaseni -->
@@ -77,5 +77,17 @@
     </form>
   </div>
 </div>
+
+<footer class="footer">
+    <div class="footer-column">
+        <h1>Kontaktní údaje</h1>
+        <p>text</p>
+    </div>
+    <div class="footer-column">
+        <h1>Adresa</h1>
+        <p>text</p>
+    </div>
+</footer>
+
 </body>
 </html>

@@ -3,15 +3,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import validates
 from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash
 
 Base = declarative_base()
-
-######Stroj_Katalog TABLE
-stroj_katalog_association = Table('stroj_katalog', Base.metadata,
-                                  Column('stroj_id', Integer, ForeignKey('Stroj.stroj_id')),
-                                  Column('katalog_stroju_id', Integer, ForeignKey('Katalog_stroju.katalog_stroju_id'))
-                                  )
-
 
 ######Pracovník(Kurýr) TABLE
 
@@ -85,8 +79,6 @@ class Stroj(Base):
     stroj_cena = Column("stroj_cena", Float, nullable=False)
     typ_stroje_id = Column("typ_stroje_id", Integer, ForeignKey("Typ_stroje.typ_stroje_id"), nullable=False)
 
-    katalogy = relationship("Katalog_stroju", secondary=stroj_katalog_association, back_populates="stroje")
-
     def __init__(self, stroj_id, stroj_nazev, stroj_typ_id, stroj_cena):
         self.stroj_id = stroj_id
         self.stroj_nazev = stroj_nazev
@@ -112,22 +104,8 @@ class Typ_stroje(Base):
     def __repr__(self):
         return f"({self.typ_stroje_id}) {self.typ_stroje_nazev}"
 
-    ######Katalog strojů TABLE
 
-
-class Katalog_stroju(Base):
-    __tablename__ = "Katalog_stroju"
-
-    katalog_stroju_id = Column("katalog_stroju_id", Integer, primary_key=True, nullable=False)
-    stroje = relationship("Stroj", secondary=stroj_katalog_association, back_populates="katalogy")
-
-    def __init__(self, katalog_stroju_id):
-        self.katalog_stroju_id = katalog_stroju_id
-
-    def __repr__(self):
-        return f"({self.katalog_stroju_id})"
-
-    ######Zakazník TABLE
+######Zakazník TABLE
 
 
 class Ucet(Base):
@@ -142,7 +120,7 @@ class Ucet(Base):
     def __init__(self, ucet_id, ucet_jmeno, ucet_heslo, ucet_email, typ_uctu_id):
         self.ucet_id = ucet_id
         self.ucet_jmeno = ucet_jmeno
-        self.ucet_heslo = ucet_heslo
+        self.ucet_heslo = generate_password_hash(ucet_heslo)
         self.ucet_email = ucet_email
         self.typ_uctu_id = typ_uctu_id
 
@@ -171,24 +149,31 @@ Base.metadata.create_all(bind=engine)
 Session = sessionmaker(bind=engine)
 session_maker = Session()
 
-typ1 = Typ_stroje(1, "Typ1")
-typ2 = Typ_stroje(2, "Typ2")
+# Prvotní nastavení testovacích účtu
+# Neimplemntovano skrz SQL kvůli hashováni hesel
+def add_user_if_not_exists(session, user_data):
+    existing_user = session.query(Ucet).filter((Ucet.ucet_jmeno == user_data['ucet_jmeno']) |
+                                               (Ucet.ucet_email == user_data['ucet_email'])).first()
+    if existing_user is None:
+        new_user = Ucet(
+            ucet_id=user_data['ucet_id'],
+            ucet_jmeno=user_data['ucet_jmeno'],
+            ucet_heslo=user_data['ucet_heslo'],
+            ucet_email=user_data['ucet_email'],
+            typ_uctu_id=user_data['typ_uctu_id']
+        )
+        session.add(new_user)
+        session.commit()
+    else:
+        print(f"User '{user_data['ucet_jmeno']}' already exists.")
 
-stroj1 = Stroj(stroj_id=1, stroj_nazev="Sekačka", stroj_cena=500.0, stroj_typ_id=1)
-stroj2 = Stroj(stroj_id=2, stroj_nazev="Kombajn", stroj_cena=1500.0, stroj_typ_id=2)
-katalog = Katalog_stroju(1)
-katalog.stroje.extend([stroj1, stroj2])
+users = [
+    {"ucet_id": 1, "ucet_jmeno": "John_Dispecer", "ucet_heslo": "dispecer123", "ucet_email": "john.dispecer@example.com", "typ_uctu_id": 1},
+    {"ucet_id": 2, "ucet_jmeno": "Jane_Technik", "ucet_heslo": "technik123", "ucet_email": "jane.technik@example.com", "typ_uctu_id": 2},
+    {"ucet_id": 3, "ucet_jmeno": "Bob_Zakaznik", "ucet_heslo": "zakaznik123", "ucet_email": "bob.zakaznik@example.com", "typ_uctu_id": 3}
+]
 
-dispecer = Ucet(2, "Franta", 1234, "franta@gmail.com", 1)
-technik = Ucet(3, "Jirka", 1234, "jirka@gmail.com", 2)
-zakaznik = Ucet(1, "Martin", 1234, "jirka@gmail.com", 3)
-# session_maker.add(dispecer)
-# session_maker.add(technik)
-# session_maker.add(zakaznik)
-pracovnik = Pracovnik(1, "Mirek", 150)
+for user_data in users:
+    add_user_if_not_exists(session_maker, user_data)
 
-# session_maker.add(typ1)
-# session_maker.add(typ2)
-# session_maker.add(pracovnik)
-# session_maker.add(katalog)
 session_maker.commit()

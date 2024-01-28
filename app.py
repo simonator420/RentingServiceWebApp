@@ -6,30 +6,34 @@ app = Flask(__name__)
 app.register_blueprint(views, url_prefix="/")
 app.config['SECRET_KEY'] = '123'
 
-# Nastavení user_name pro umístění v záhlaví ve všech stránkách
+# Kontextový procesor pro nastavení jména uživatele v záhlaví všech stránek
 @app.context_processor
 def set_user_name():
+    # Vrací user_name s hodnotou získanou ze session
     return {'user_name': session.get('user_name')}
 
-# Získání typů strojů pro vyplnění comboboxu
+# Kontextový procesor pro získání typů strojů pro vyplnění comboboxu
 @app.context_processor
 def set_typ_stroje_values():
     typ_stroje_values = session_maker.query(Typ_stroje.typ_stroje_nazev).distinct().all()
-
+    # Převedení výsledků dotazu na seznam
     typ_stroje_values = [value[0] for value in typ_stroje_values]
-
+    # Vrací typ_stroje_values se seznamem názvů typů strojů
     return {'typ_stroje_values': typ_stroje_values}
 
+# Kontextový procesor pro nastavení typu uživatelského účtu
 @app.context_processor
 def set_typ_uctu_id():
+    # Vrací typ_uctu s hodnotou typu uživatelského účtu ze session
     return {'typ_uctu': session.get('typ_uctu_id')}
 
+# Kontextový procesor pro nastavení ID uživatele
 @app.context_processor
 def set_user_id():
+    # Vrací ucet_id s hodnotou ID uživatele ze session
     return {'ucet_id': session.get('ucet_id')}
 
 Base.metadata.create_all(engine)
-
 
 
 if __name__ == '__main__':

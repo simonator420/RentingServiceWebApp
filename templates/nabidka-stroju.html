@@ -27,7 +27,7 @@
         {% endif %}
         <!-- Pokud je uživatel technik -->
         {% if typ_uctu == 2 %}
-        <a href="/">Přiřazené objednávky</a>
+        <a href="/moje-zakazky">Přiřazené objednávky</a>
         {% endif %}
 
         <!-- Pokud je uživatel přihlášen -->
@@ -81,7 +81,7 @@
         <div class="stroj-box">
             <h2>{{ stroj.stroj_nazev }}</h2>
             <p>Cena: {{ stroj.stroj_cena }} Kč</p>
-            <p>Datum dostupnosti: {{ stroj.datum_dostupnosti }}</p>
+            <p style="display: none;">Datum dostupnosti: {{ stroj.datum_dostupnosti }}</p>
             <p>{{ stroj.stroj_popis }}</p>
             {% if user_name %}
             <button class="reserve-button" onclick="toggleReserveForm('reserve-form-{{ stroj.stroj_id }}')">Zarezervovat</button>
@@ -89,9 +89,9 @@
                 <form action="/nabidka-stroju" method="post">
                     <input type="hidden" name="stroj_id" value="{{ stroj.stroj_id }}">
                     <input type="hidden" name="ucet_id" value="{{ ucet_id }}">
-                    <input type="date" name="datum_od" placeholder="Datum od" required>
-                    <input type="date" name="datum_do" placeholder="Datum do" required>
-                    <input type="submit" value="Přidej Objednávku">
+                    <input type="date" name="datum_od" placeholder="Datum od" required class="datum-rezervace">
+                    <input type="date" name="datum_do" placeholder="Datum do" required class="datum-rezervace">
+                    <input type="submit" value="Přidej Objednávku" class="button-rezervace">
                 </form>
             </div>
             {% endif %}
@@ -101,6 +101,17 @@
 
 
 </div>
+
+<footer class="footer">
+    <div class="footer-column">
+        <h1>Kontaktní údaje</h1>
+        <p>text</p>
+    </div>
+    <div class="footer-column">
+        <h1>Adresa</h1>
+        <p>text</p>
+    </div>
+</footer>
 
 </body>
 </html>
