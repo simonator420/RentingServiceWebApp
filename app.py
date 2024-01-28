@@ -1,9 +1,14 @@
 from flask import Flask, session
-from views import views
+from views.profile import profile
+from views.homepage import homepage
+from views.order import order
 from database.database import Base, engine, session_maker, Typ_stroje
 
 app = Flask(__name__)
-app.register_blueprint(views, url_prefix="/")
+app.register_blueprint(homepage, url_prefix="/")
+app.register_blueprint(profile, url_prefix="/profile")
+app.register_blueprint(order, url_prefix="/order")
+
 app.config['SECRET_KEY'] = '123'
 
 # Kontextový procesor pro nastavení jména uživatele v záhlaví všech stránek

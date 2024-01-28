@@ -6,7 +6,7 @@
     <div class="main-content">
       <div class="registration-form">
         <h2>Registrace</h2>
-        <form method="POST" action="/registrace">
+        <form method="POST" action="{{ url_for('profile.registrace') }}">
           {{ form.hidden_tag() }}
           <div>
             {{ form.name.label }}

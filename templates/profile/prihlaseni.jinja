@@ -6,7 +6,7 @@
     <div class="main-content">
       <div class="login-container">
         <h2>Přihlášení</h2>
-        <form action="/prihlaseni" method="post">
+        <form action="{{ url_for('profile.prihlaseni') }}" method="post">
           {{ form.hidden_tag() }}
           <div>
             {{ form.name.label }}
@@ -20,7 +20,7 @@
             {{ form.submit(class="btn btn-primary") }}
           </div>
           <div>
-            <a href="/registrace">Vytvořit si účet</a>
+            <a href="{{url_for('profile.registrace')}}">Vytvořit si účet</a>
           </div>
         </form>
 

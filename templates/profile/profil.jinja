@@ -37,7 +37,7 @@
             <td>{{ ucet_jmeno }}</td> <!-- Replaced pracovnik_jmeno with ucet_jmeno -->
             <td>{{ cena }} Kč</td>
             <td>
-              <form action="/zrusit_rezervaci" method="post">
+              <form action="{{ url_for('order.zrusit_rezervaci') }}" method="post">
                 <input type="hidden" name="rezervace_id" value="{{ rezervace.rezervace_id }}">
                 <button type="submit" class="cancel-reservation">Zrušit rezervaci</button>
               </form>

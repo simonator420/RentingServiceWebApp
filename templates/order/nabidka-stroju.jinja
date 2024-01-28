@@ -43,7 +43,7 @@
                 {% if user_name %}
                 <button class="reserve-button" onclick="toggleReserveForm('reserve-form-{{ stroj.stroj_id }}')">Zarezervovat</button>
                 <div id="reserve-form-{{ stroj.stroj_id }}" style="display: none;">
-                    <form action="/nabidka-stroju" method="post">
+                    <form action="{{ url_for('order.nabidka_stroju') }}" method="post">
                         <input type="hidden" name="stroj_id" value="{{ stroj.stroj_id }}">
                         <input type="hidden" name="ucet_id" value="{{ ucet_id }}">
                         <input type="date" name="datum_od" placeholder="Datum od" required class="datum-rezervace">
