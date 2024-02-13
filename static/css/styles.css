@@ -53,6 +53,13 @@ html, body {
     align-items: center;
 }
 
+.form-section form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
 .form-section .input-group label {
     margin-right: 0.5em;
     color: white;

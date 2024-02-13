@@ -1,9 +1,7 @@
 from flask import *
-from forms.forms import *
+from forms import *
 from database.database import *
 from werkzeug.security import check_password_hash
-import datetime
-
 
 profile = Blueprint('profile', __name__)
 

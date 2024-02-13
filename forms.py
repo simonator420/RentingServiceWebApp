@@ -3,6 +3,12 @@ from wtforms import *
 from wtforms.validators import *
 from wtforms.widgets import *
 
+class SearchForm(FlaskForm):
+    type = SelectField('Typ stroje: ', choices=[], validators=[DataRequired()])
+    date_from = DateField('Datum od: ', validators=[DataRequired()])
+    date_to = DateField('Datum do: ', validators=[DataRequired()])
+    submit = SubmitField('OK', validators=[DataRequired()])
+
 
 # Struktura formuláře pro přihlášení zákazníka
 class SingupForm(FlaskForm):

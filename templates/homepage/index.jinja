@@ -8,48 +8,50 @@
             <h1>Půjčovna strojů</h1>
             <h2>Zadejte vaše preference a doručíme vám stroj do druhého dne</h2>
         </div>
-        <div class="form-section">
-             <!--<form id="filter-form" method="POST" action="{{ url_for('homepage.home') }}">-->
-            <div class="input-group">
-                <label for="machine-type">Typ stroje:</label>
-                <select id="machine-type">
-                    <option value="default">Vyberte typ stroje</option>
-                    <!-- Vyplnění zápisy z tabulky Typ_stroje -->
-                    {% for typ_stroje_value in typ_stroje_values %}
-                    <option value="{{ typ_stroje_value }}">{{ typ_stroje_value }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="date-from">Od kdy:</label>
-                <input type="date" id="date-from">
-            </div>
-            <div class="input-group">
-                <label for="date-to">Do kdy:</label>
-                <input type="date" id="date-to">
-            </div>
-            <button type="submit">OK</button>
-             <!--</form>-->
-            <div class="error-message"></div>
-            <!--po vybrání by se měli vypsat věci zde-->
-    <div class="output-group">
-        {% for result in results %}
-            <div class="input-group">
-                <label for="machine-type">Typ stroje:</label>
-                <p>{{ result.typ_stroje.typ }}</p>
-            </div>
-            <div class="input-group">
-                <label for="date-from">Od kdy:</label>
-                <p>{{ result.datum_od }}</p>
-            </div>
-            <div class="input-group">
-                <label for="date-to">Do kdy:</label>
-                <p>{{ result.datum_do }}</p>
-            </div>
-            <hr>
-        {% endfor %}
-    </div>
+{#        <div class="form-section">#}
+{#             <!--<form id="filter-form" method="POST" action="{{ url_for('homepage.home') }}">-->#}
+{#            <div class="input-group">#}
+{#                <label for="machine-type">Typ stroje:</label>#}
+{#                <select id="machine-type">#}
+{#                    <option value="default">Vyberte typ stroje</option>#}
+{#                    <!-- Vyplnění zápisy z tabulky Typ_stroje -->#}
+{#                    {% for typ_stroje_value in typ_stroje_values %}#}
+{#                    <option value="{{ typ_stroje_value }}">{{ typ_stroje_value }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#            </div>#}
+{#            <div class="input-group">#}
+{#                <label for="date-from">Od kdy:</label>#}
+{#                <input type="date" id="date-from">#}
+{#            </div>#}
+{#            <div class="input-group">#}
+{#                <label for="date-to">Do kdy:</label>#}
+{#                <input type="date" id="date-to">#}
+{#            </div>#}
+{#            <button type="submit">OK</button>#}
+{#             <!--</form>-->#}
+{#            <div class="error-message"></div>#}
+{#        </div>#}
 
+        <div class="form-section">
+            <form action="{{ url_for('homepage.search') }}" method="post">
+                {{ search_form.hidden_tag() }}
+                <div class="input-group">
+                    {{ search_form.type.label }}
+                    {{ search_form.type(id="machine-type") }}
+                </div>
+                <div class="input-group">
+                    {{ search_form.date_from.label }}
+                    {{ search_form.date_from(id="date-from") }}
+                </div>
+                <div class="input-group">
+                    {{ search_form.date_to.label }}
+                    {{ search_form.date_to(id="date-to") }}
+                </div>
+                <div>
+                    {{ search_form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
         </div>
     </div>
 

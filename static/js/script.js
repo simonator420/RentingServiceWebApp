@@ -10,6 +10,10 @@ function toggleMenu() {
 document.addEventListener('DOMContentLoaded', function () {
     var dateFrom = document.getElementById('date-from');
     var dateTo = document.getElementById('date-to');
+    var today = new Date().toISOString().split('T')[0];
+
+    dateTo.min = today;
+    dateFrom.min = today;
 
     // Funkce pro aktualizaci omezení pro výběr data
     function updateDateConstraints() {

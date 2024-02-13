@@ -1,7 +1,6 @@
 from flask import *
-from forms.forms import *
+from forms import *
 from database.database import *
-from werkzeug.security import check_password_hash
 import datetime
 
 order = Blueprint('order', __name__)
@@ -103,7 +102,7 @@ def zrusit_rezervaci():
         session_maker.commit()
 
     # Přesměrování zpět na profil uživatele
-    return redirect(url_for('views.profil'))
+    return redirect(url_for('profile.profil'))
 
 # Zrušení objednávky dispečerem
 @order.route('/zrusit_objednavku', methods=['POST'])
